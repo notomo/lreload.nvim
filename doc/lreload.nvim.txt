@@ -1,0 +1,33 @@
+*lreload.nvim.txt*
+
+==============================================================================
+Lua module: lreload                                     *lreload.nvim-lreload*
+
+refresh({name})                                            *lreload.refresh()*
+  Refresh the lua modules.
+
+  Parameters: ~
+    {name} module name prefix
+
+enable({name})                                              *lreload.enable()*
+  Enable hot-reloading for the lua module.
+
+  Parameters: ~
+    {name} module name prefix
+
+disable({name})                                            *lreload.disable()*
+  Disable hot-reloading for the lua module.
+
+  Parameters: ~
+    {name} module name prefix
+
+==============================================================================
+EXAMPLES                                               *lreload.nvim-EXAMPLES*
+
+>
+  -- Enable hot-reloading myplugin
+  require("lreload").enable("myplugin")
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help
