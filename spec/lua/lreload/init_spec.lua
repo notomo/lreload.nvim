@@ -64,4 +64,14 @@ describe("lreload.nvim", function()
     assert.is_true(require("lreload.lib.testdata.data").loaded)
   end)
 
+  it("can custom trigger events", function()
+    require("lreload.lib.testdata.data").loaded = true
+
+    lreload.enable("lreload.lib.testdata.data", {events = {"BufLeave"}})
+    vim.cmd("edit " .. helper.root .. "/lua/lreload/lib/testdata/data.lua")
+    vim.cmd("tabedit")
+
+    assert.is_nil(require("lreload.lib.testdata.data").loaded)
+  end)
+
 end)

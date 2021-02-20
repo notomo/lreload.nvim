@@ -37,11 +37,18 @@ local to_pattern = function(name)
   return ("*/lua/%s.lua,*/lua/%s/*"):format(path, path)
 end
 
-function Command.enable(name)
-  vim.validate({name = {name, "string"}})
+function Command.enable(name, opts)
+  vim.validate({name = {name, "string"}, opts = {opts, "table", true}})
+  opts = opts or {}
+
+  vim.validate({events = {opts.events, "table", true}})
+  opts.events = opts.events or {"BufWritePost"}
+
   local pattern = to_pattern(name)
-  local on_write = ([[autocmd %s BufWritePost %s lua require("lreload").refresh("%s")]]):format(group_name, pattern, name)
-  vim.cmd(on_write)
+  for _, event in ipairs(opts.events) do
+    local cmd = ([[autocmd %s %s %s lua require("lreload").refresh("%s")]]):format(group_name, event, pattern, name)
+    vim.cmd(cmd)
+  end
 end
 
 function Command.disable(name)

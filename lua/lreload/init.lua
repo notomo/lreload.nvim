@@ -10,8 +10,9 @@ end
 
 --- Enable hot-reloading for the lua module.
 --- @param module name prefix
-function M.enable(name)
-  Command.new("enable", name)
+--- @param (optional) default: {events = {"BufWritePost"}}
+function M.enable(name, opts)
+  Command.new("enable", name, opts)
 end
 
 --- Disable hot-reloading for the lua module.
