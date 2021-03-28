@@ -7,20 +7,20 @@ refresh({name})                                            *lreload.refresh()*
   Refresh the lua modules.
 
   Parameters: ~
-    {name} module name prefix
+    {name} (string) module name prefix
 
 enable({name}, {opts})                                      *lreload.enable()*
   Enable hot-reloading for the lua module.
 
   Parameters: ~
-    {name} module name prefix
-    {opts} (optional) default: {events = {"BufWritePost"}}
+    {name} (string) name prefix
+    {opts} (table) default = {events = {"BufWritePost"}}
 
 disable({name})                                            *lreload.disable()*
   Disable hot-reloading for the lua module.
 
   Parameters: ~
-    {name} module name prefix
+    {name} (string) module name prefix
 
 ==============================================================================
 EXAMPLES                                               *lreload.nvim-EXAMPLES*

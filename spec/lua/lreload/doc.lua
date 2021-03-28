@@ -1,4 +1,4 @@
-local example_path = "./spec/example.lua"
+local example_path = "./spec/lua/lreload/example.lua"
 
 require("genvdoc").generate("lreload.nvim", {
   chapters = {
