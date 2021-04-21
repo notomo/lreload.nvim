@@ -1,9 +1,10 @@
-local M = {}
+local plugin_name = vim.split((...):gsub("%.", "/"), "/", true)[1]
+local M = require("vusted.helper")
 
-M.root = require("lreload.lib.path").find_root()
+M.root = M.find_plugin_root(plugin_name)
 
 function M.before_each()
-  require("lreload").refresh("lreload")
+  M.cleanup_loaded_modules(plugin_name)
 end
 
 function M.after_each()
