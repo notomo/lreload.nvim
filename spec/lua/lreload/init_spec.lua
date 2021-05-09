@@ -1,5 +1,5 @@
 local helper = require("lreload.lib.testlib.helper")
-local lreload = require("lreload")
+local lreload = helper.require("lreload")
 
 describe("lreload.nvim", function()
 
@@ -72,6 +72,21 @@ describe("lreload.nvim", function()
     vim.cmd("tabedit")
 
     assert.is_nil(require("lreload.lib.testdata.data").loaded)
+  end)
+
+  it("can custom post reload hook", function()
+    local post_hooked = false
+    require("lreload.lib.testdata.data").loaded = true
+
+    lreload.enable("lreload.lib.testdata.data", {
+      post_hook = function()
+        post_hooked = true
+      end,
+    })
+    vim.cmd("edit " .. helper.root .. "/lua/lreload/lib/testdata/data.lua")
+    vim.cmd("silent write")
+
+    assert.is_true(post_hooked)
   end)
 
 end)

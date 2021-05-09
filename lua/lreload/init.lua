@@ -10,7 +10,7 @@ end
 
 --- Enable hot-reloading for the lua module.
 --- @param name string: name prefix
---- @param opts table: default = {events = {"BufWritePost"}}
+--- @param opts table: default = {events = {"BufWritePost"}, post_hook = nil}
 function M.enable(name, opts)
   Command.new("enable", name, opts)
 end

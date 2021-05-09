@@ -14,7 +14,7 @@ enable({name}, {opts})                                      *lreload.enable()*
 
   Parameters: ~
     {name} (string) name prefix
-    {opts} (table) default = {events = {"BufWritePost"}}
+    {opts} (table) default = {events = {"BufWritePost"}, post_hook = nil}
 
 disable({name})                                            *lreload.disable()*
   Disable hot-reloading for the lua module.

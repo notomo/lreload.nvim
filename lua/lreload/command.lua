@@ -1,3 +1,4 @@
+local post_hooks = require("lreload.lib.repository").Repository.new("post_hook")
 local messagelib = require("lreload.lib.message")
 
 local M = {}
@@ -26,6 +27,11 @@ function Command.refresh(name)
       package.loaded[key] = nil
     end
   end
+
+  local post_hook = post_hooks:get(name)
+  if post_hook then
+    post_hook()
+  end
 end
 
 local group_name = "lreload"
@@ -44,17 +50,26 @@ function Command.enable(name, opts)
   vim.validate({events = {opts.events, "table", true}})
   opts.events = opts.events or {"BufWritePost"}
 
+  vim.validate({post_hook = {opts.post_hook, "function", true}})
+
   local pattern = to_pattern(name)
   for _, event in ipairs(opts.events) do
     local cmd = ([[autocmd %s %s %s lua require("lreload").refresh("%s")]]):format(group_name, event, pattern, name)
     vim.cmd(cmd)
   end
+
+  if opts.post_hook then
+    post_hooks:set(name, opts.post_hook)
+  end
 end
 
 function Command.disable(name)
   vim.validate({name = {name, "string"}})
+
   local pattern = to_pattern(name)
   vim.cmd(([[autocmd! %s * %s]]):format(group_name, pattern))
+
+  post_hooks:delete(name)
 end
 
 return M
