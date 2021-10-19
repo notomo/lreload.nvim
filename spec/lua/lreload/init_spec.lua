@@ -89,4 +89,23 @@ describe("lreload.nvim", function()
     assert.is_true(post_hooked)
   end)
 
+  it("avoids duplicated autocmd", function()
+    local called_count = 0
+
+    lreload.enable("lreload.lib.testdata.data", {
+      post_hook = function()
+        called_count = called_count + 1
+      end,
+    })
+    lreload.enable("lreload.lib.testdata.data", {
+      post_hook = function()
+        called_count = called_count + 1
+      end,
+    })
+    vim.cmd("edit " .. helper.root .. "/lua/lreload/lib/testdata/data.lua")
+    vim.cmd("silent write")
+
+    assert.is_same(1, called_count)
+  end)
+
 end)

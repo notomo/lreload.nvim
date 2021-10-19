@@ -34,13 +34,13 @@ function Command.refresh(name)
   end
 end
 
-local group_name = "lreload"
-vim.cmd("augroup " .. group_name)
-vim.cmd("augroup END")
-
 local to_pattern = function(name)
   local path = name:gsub("%.", "/")
   return ("*/lua/%s.lua,*/lua/%s/*"):format(path, path)
+end
+
+local to_group_name = function(name)
+  return "lreload_" .. name
 end
 
 function Command.enable(name, opts)
@@ -53,6 +53,12 @@ function Command.enable(name, opts)
   vim.validate({post_hook = {opts.post_hook, "function", true}})
 
   local pattern = to_pattern(name)
+  local group_name = to_group_name(name)
+  vim.cmd(([[
+augroup %s
+  autocmd!
+augroup END
+]]):format(group_name))
   for _, event in ipairs(opts.events) do
     local cmd = ([[autocmd %s %s %s lua require("lreload").refresh("%s")]]):format(group_name, event, pattern, name)
     vim.cmd(cmd)
@@ -67,6 +73,7 @@ function Command.disable(name)
   vim.validate({name = {name, "string"}})
 
   local pattern = to_pattern(name)
+  local group_name = to_group_name(name)
   vim.cmd(([[autocmd! %s * %s]]):format(group_name, pattern))
 
   post_hooks:delete(name)
