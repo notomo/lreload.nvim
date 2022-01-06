@@ -2,7 +2,6 @@ local helper = require("lreload.lib.testlib.helper")
 local lreload = helper.require("lreload")
 
 describe("lreload.nvim", function()
-
   before_each(helper.before_each)
   after_each(helper.after_each)
 
@@ -67,7 +66,7 @@ describe("lreload.nvim", function()
   it("can custom trigger events", function()
     require("lreload.lib.testdata.data").loaded = true
 
-    lreload.enable("lreload.lib.testdata.data", {events = {"BufLeave"}})
+    lreload.enable("lreload.lib.testdata.data", { events = { "BufLeave" } })
     vim.cmd("edit " .. helper.root .. "/lua/lreload/lib/testdata/data.lua")
     vim.cmd("tabedit")
 
@@ -107,5 +106,4 @@ describe("lreload.nvim", function()
 
     assert.is_same(1, called_count)
   end)
-
 end)

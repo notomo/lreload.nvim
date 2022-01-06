@@ -8,7 +8,7 @@ Command.__index = Command
 M.Command = Command
 
 function Command.new(name, ...)
-  local args = {...}
+  local args = { ... }
   local f = function()
     return Command[name](unpack(args))
   end
@@ -20,10 +20,10 @@ function Command.new(name, ...)
 end
 
 function Command.refresh(name)
-  vim.validate({name = {name, "string"}})
+  vim.validate({ name = { name, "string" } })
   local dir = name:gsub("/", ".") .. "."
   for key in pairs(package.loaded) do
-    if (vim.startswith(key:gsub("/", "."), dir) or key == name) then
+    if vim.startswith(key:gsub("/", "."), dir) or key == name then
       package.loaded[key] = nil
     end
   end
@@ -44,13 +44,13 @@ local to_group_name = function(name)
 end
 
 function Command.enable(name, opts)
-  vim.validate({name = {name, "string"}, opts = {opts, "table", true}})
+  vim.validate({ name = { name, "string" }, opts = { opts, "table", true } })
   opts = opts or {}
 
-  vim.validate({events = {opts.events, "table", true}})
-  opts.events = opts.events or {"BufWritePost"}
+  vim.validate({ events = { opts.events, "table", true } })
+  opts.events = opts.events or { "BufWritePost" }
 
-  vim.validate({post_hook = {opts.post_hook, "function", true}})
+  vim.validate({ post_hook = { opts.post_hook, "function", true } })
 
   local pattern = to_pattern(name)
   local group_name = to_group_name(name)
@@ -70,7 +70,7 @@ augroup END
 end
 
 function Command.disable(name)
-  vim.validate({name = {name, "string"}})
+  vim.validate({ name = { name, "string" } })
 
   local pattern = to_pattern(name)
   local group_name = to_group_name(name)
