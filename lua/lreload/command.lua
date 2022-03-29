@@ -35,17 +35,14 @@ function ShowError.enable(name, opts)
 
   vim.validate({ post_hook = { opts.post_hook, "function", true } })
 
-  local pattern = to_pattern(name)
-  local group_name = to_group_name(name)
-  vim.cmd(([[
-augroup %s
-  autocmd!
-augroup END
-]]):format(group_name))
-  for _, event in ipairs(opts.events) do
-    local cmd = ([[autocmd %s %s %s lua require("lreload").refresh("%s")]]):format(group_name, event, pattern, name)
-    vim.cmd(cmd)
-  end
+  local group = vim.api.nvim_create_augroup(to_group_name(name), {})
+  vim.api.nvim_create_autocmd(opts.events, {
+    group = group,
+    pattern = { to_pattern(name) },
+    callback = function()
+      require("lreload").refresh(name)
+    end,
+  })
 
   if opts.post_hook then
     _post_hooks[name] = opts.post_hook
@@ -54,11 +51,7 @@ end
 
 function ShowError.disable(name)
   vim.validate({ name = { name, "string" } })
-
-  local pattern = to_pattern(name)
-  local group_name = to_group_name(name)
-  vim.cmd(([[autocmd! %s * %s]]):format(group_name, pattern))
-
+  vim.api.nvim_create_augroup(to_group_name(name), {})
   _post_hooks[name] = nil
 end
 
