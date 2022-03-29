@@ -17,20 +17,19 @@ function ShowError.refresh(name)
   end
 end
 
-local to_pattern = function(name)
-  local path = name:gsub("%.", "/")
-  return ("*/lua/%s.lua,*/lua/%s/*"):format(path, path)
-end
-
 local to_group_name = function(name)
   return "lreload_" .. name
 end
 
 function ShowError.enable(name, raw_opts)
   local opts = require("lreload.option").new(raw_opts)
+  local path = name:gsub("%.", "/")
   vim.api.nvim_create_autocmd(opts.events, {
     group = vim.api.nvim_create_augroup(to_group_name(name), {}),
-    pattern = { to_pattern(name) },
+    pattern = {
+      ("*/lua/%s.lua"):format(path),
+      ("*/lua/%s/*"):format(path),
+    },
     callback = function()
       require("lreload").refresh(name)
     end,
