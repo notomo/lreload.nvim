@@ -1,6 +1,11 @@
-local example_path = "./spec/lua/lreload/example.lua"
+local util = require("genvdoc.util")
+local plugin_name = vim.env.PLUGIN_NAME
+local full_plugin_name = plugin_name .. ".nvim"
 
-require("genvdoc").generate("lreload.nvim", {
+local example_path = ("./spec/lua/%s/example.lua"):format(plugin_name)
+dofile(example_path)
+
+require("genvdoc").generate(full_plugin_name, {
   chapters = {
     {
       name = function(group)
@@ -16,7 +21,7 @@ require("genvdoc").generate("lreload.nvim", {
     {
       name = "EXAMPLES",
       body = function()
-        return require("genvdoc.util").help_code_block_from_file(example_path)
+        return util.help_code_block_from_file(example_path)
       end,
     },
   },
@@ -28,14 +33,14 @@ local gen_readme = function()
   f:close()
 
   local content = ([[
-# lreload.nvim
+# %s
 
 Hot-reloading manager for neovim lua plugin development
 
 ## Example
 
 ```lua
-%s```]]):format(exmaple)
+%s```]]):format(full_plugin_name, exmaple)
 
   local readme = io.open("README.md", "w")
   readme:write(content)

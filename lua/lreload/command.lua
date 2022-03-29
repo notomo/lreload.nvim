@@ -1,25 +1,8 @@
-local post_hooks = require("lreload.lib.repository").Repository.new("post_hook")
-local messagelib = require("lreload.lib.message")
+local ShowError = require("lreload.vendor.misclib.error_handler").for_show_error()
 
-local M = {}
+local _post_hooks = {}
 
-local Command = {}
-Command.__index = Command
-M.Command = Command
-
-function Command.new(name, ...)
-  local args = { ... }
-  local f = function()
-    return Command[name](unpack(args))
-  end
-
-  local ok, msg = xpcall(f, debug.traceback)
-  if not ok then
-    return messagelib.error(msg)
-  end
-end
-
-function Command.refresh(name)
+function ShowError.refresh(name)
   vim.validate({ name = { name, "string" } })
   local dir = name:gsub("/", ".") .. "."
   for key in pairs(package.loaded) do
@@ -28,7 +11,7 @@ function Command.refresh(name)
     end
   end
 
-  local post_hook = post_hooks:get(name)
+  local post_hook = _post_hooks[name]
   if post_hook then
     post_hook()
   end
@@ -43,7 +26,7 @@ local to_group_name = function(name)
   return "lreload_" .. name
 end
 
-function Command.enable(name, opts)
+function ShowError.enable(name, opts)
   vim.validate({ name = { name, "string" }, opts = { opts, "table", true } })
   opts = opts or {}
 
@@ -65,18 +48,18 @@ augroup END
   end
 
   if opts.post_hook then
-    post_hooks:set(name, opts.post_hook)
+    _post_hooks[name] = opts.post_hook
   end
 end
 
-function Command.disable(name)
+function ShowError.disable(name)
   vim.validate({ name = { name, "string" } })
 
   local pattern = to_pattern(name)
   local group_name = to_group_name(name)
   vim.cmd(([[autocmd! %s * %s]]):format(group_name, pattern))
 
-  post_hooks:delete(name)
+  _post_hooks[name] = nil
 end
 
-return M
+return ShowError:methods()
