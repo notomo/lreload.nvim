@@ -24,8 +24,9 @@ end
 function ShowError.enable(name, raw_opts)
   local opts = require("lreload.option").new(raw_opts)
   local path = name:gsub("%.", "/")
+  local group_name = to_group_name(name)
   vim.api.nvim_create_autocmd(opts.events, {
-    group = vim.api.nvim_create_augroup(to_group_name(name), {}),
+    group = vim.api.nvim_create_augroup(group_name, {}),
     pattern = {
       ("*/lua/%s.lua"):format(path),
       ("*/lua/%s/*"):format(path),
@@ -33,13 +34,14 @@ function ShowError.enable(name, raw_opts)
     callback = function()
       require("lreload").refresh(name)
     end,
+    desc = group_name,
   })
   _post_hooks[name] = opts.post_hook
 end
 
 function ShowError.disable(name)
   vim.validate({ name = { name, "string" } })
-  vim.api.nvim_create_augroup(to_group_name(name), {})
+  vim.api.nvim_clear_autocmds({ group = to_group_name(name) })
   _post_hooks[name] = nil
 end
 
