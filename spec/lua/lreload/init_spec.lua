@@ -88,6 +88,21 @@ describe("lreload.nvim", function()
     assert.is_true(post_hooked)
   end)
 
+  it("can receive autocmd callback arguments by post reload hook", function()
+    require("lreload.test.data").loaded = true
+
+    local received
+    lreload.enable("lreload.test.data", {
+      post_hook = function(args)
+        received = args
+      end,
+    })
+    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd("silent write")
+
+    assert.equal("BufWritePost", received.event)
+  end)
+
   it("avoids duplicated autocmd", function()
     local called_count = 0
 

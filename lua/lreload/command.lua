@@ -2,8 +2,11 @@ local ShowError = require("lreload.vendor.misclib.error_handler").for_show_error
 
 local _post_hooks = {}
 
-function ShowError.refresh(name)
-  vim.validate({ name = { name, "string" } })
+function ShowError.refresh(name, autocmd_callback_args)
+  vim.validate({
+    name = { name, "string" },
+    autocmd_callback_args = { autocmd_callback_args, "table", true },
+  })
   local dir = name:gsub("/", ".") .. "."
   for key in pairs(package.loaded) do
     if vim.startswith(key:gsub("/", "."), dir) or key == name then
@@ -13,7 +16,7 @@ function ShowError.refresh(name)
 
   local post_hook = _post_hooks[name]
   if post_hook then
-    post_hook()
+    post_hook(autocmd_callback_args)
   end
 end
 
@@ -31,8 +34,8 @@ function ShowError.enable(name, raw_opts)
       ("*/lua/%s.lua"):format(path),
       ("*/lua/%s/*"):format(path),
     },
-    callback = function()
-      require("lreload").refresh(name)
+    callback = function(args)
+      require("lreload.command").refresh(name, args)
     end,
     desc = group_name,
   })
