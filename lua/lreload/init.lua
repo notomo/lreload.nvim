@@ -8,7 +8,7 @@ end
 
 --- Enable hot-reloading for the lua module.
 --- @param name string: name prefix
---- @param opts table: default = {events = {"BufWritePost"}, post_hook = nil}
+--- @param opts table: |lreload.nvim-opts|
 function M.enable(name, opts)
   require("lreload.command").enable(name, opts)
 end

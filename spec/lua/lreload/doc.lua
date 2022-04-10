@@ -19,6 +19,28 @@ require("genvdoc").generate(full_plugin_name, {
       end,
     },
     {
+      name = "TYPES",
+      body = function(ctx)
+        local opts_text
+        do
+          local descriptions = {
+            events = [[(table): autocmd events. default: %s]],
+            post_hook = [[(function): called after refreshed.
+  The function arugment is the same with autocmd api callback.
+  default: function(args) end]],
+          }
+          local default = require("lreload.option").default
+          local keys = vim.tbl_keys(default)
+          local lines = util.each_keys_description(keys, descriptions, default)
+          opts_text = table.concat(lines, "\n")
+        end
+
+        return util.sections(ctx, {
+          { name = "options", tag_name = "opts", text = opts_text },
+        })
+      end,
+    },
+    {
       name = "EXAMPLES",
       body = function()
         return util.help_code_block_from_file(example_path)
