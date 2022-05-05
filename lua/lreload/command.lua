@@ -37,7 +37,6 @@ function ShowError.enable(name, raw_opts)
     callback = function(args)
       require("lreload.command").refresh(name, args)
     end,
-    desc = group_name,
   })
   _post_hooks[name] = opts.post_hook
 end
