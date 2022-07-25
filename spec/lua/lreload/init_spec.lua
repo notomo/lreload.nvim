@@ -18,8 +18,8 @@ describe("lreload.nvim", function()
 
     lreload.enable("lreload.test.data.data1")
 
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/data1/dummy.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/data1/dummy.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_nil(require("lreload.test.data.data1.dummy").loaded)
   end)
@@ -29,8 +29,8 @@ describe("lreload.nvim", function()
 
     lreload.enable("lreload.test.data")
 
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_nil(require("lreload.test.data").loaded)
   end)
@@ -42,10 +42,10 @@ describe("lreload.nvim", function()
     lreload.enable("lreload.test.data.data1")
     lreload.enable("lreload.test.data.data2")
 
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/data1/dummy.lua")
-    vim.cmd("silent write")
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/data2/dummy.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/data1/dummy.lua")
+    vim.cmd.write({ mods = { silent = true } })
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/data2/dummy.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_nil(require("lreload.test.data.data1.dummy").loaded)
     assert.is_nil(require("lreload.test.data.data2.dummy").loaded)
@@ -57,8 +57,8 @@ describe("lreload.nvim", function()
     lreload.enable("lreload.test.data")
     lreload.disable("lreload.test.data")
 
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_true(require("lreload.test.data").loaded)
   end)
@@ -67,8 +67,8 @@ describe("lreload.nvim", function()
     require("lreload.test.data").loaded = true
 
     lreload.enable("lreload.test.data", { events = { "BufLeave" } })
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("tabedit")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.tabedit()
 
     assert.is_nil(require("lreload.test.data").loaded)
   end)
@@ -82,8 +82,8 @@ describe("lreload.nvim", function()
         post_hooked = true
       end,
     })
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_true(post_hooked)
   end)
@@ -97,8 +97,8 @@ describe("lreload.nvim", function()
         received = args
       end,
     })
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.equal("BufWritePost", received.event)
   end)
@@ -116,8 +116,8 @@ describe("lreload.nvim", function()
         called_count = called_count + 1
       end,
     })
-    vim.cmd("edit " .. helper.root .. "/lua/lreload/test/data/init.lua")
-    vim.cmd("silent write")
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
 
     assert.is_same(1, called_count)
   end)
