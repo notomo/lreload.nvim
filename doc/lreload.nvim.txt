@@ -35,7 +35,7 @@ options                                                    *lreload.nvim-opts*
 ==============================================================================
 EXAMPLES                                               *lreload.nvim-EXAMPLES*
 
->
+>lua
   -- Enable hot-reloading myplugin
   require("lreload").enable("myplugin")
 <
