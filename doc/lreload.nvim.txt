@@ -14,7 +14,7 @@ enable({name}, {opts})                                      *lreload.enable()*
 
   Parameters: ~
     {name} (string) name prefix
-    {opts} (table) |lreload.nvim-opts|
+    {opts} (table|nil) |lreload.nvim-opts|
 
 disable({name})                                            *lreload.disable()*
   Disable hot-reloading for the lua module.

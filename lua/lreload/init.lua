@@ -8,7 +8,7 @@ end
 
 --- Enable hot-reloading for the lua module.
 --- @param name string: name prefix
---- @param opts table: |lreload.nvim-opts|
+--- @param opts table|nil: |lreload.nvim-opts|
 function M.enable(name, opts)
   require("lreload.command").enable(name, opts)
 end
