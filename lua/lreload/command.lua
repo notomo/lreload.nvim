@@ -1,8 +1,8 @@
-local ShowError = require("lreload.vendor.misclib.error_handler").for_show_error()
+local M = {}
 
 local _post_hooks = {}
 
-function ShowError.refresh(name, autocmd_callback_args)
+function M.refresh(name, autocmd_callback_args)
   vim.validate({
     name = { name, "string" },
     autocmd_callback_args = { autocmd_callback_args, "table", true },
@@ -24,7 +24,7 @@ local to_group_name = function(name)
   return "lreload_" .. name
 end
 
-function ShowError.enable(name, raw_opts)
+function M.enable(name, raw_opts)
   local opts = require("lreload.option").new(raw_opts)
   local path = name:gsub("%.", "/")
   local group_name = to_group_name(name)
@@ -35,16 +35,16 @@ function ShowError.enable(name, raw_opts)
       ("*/lua/%s/*"):format(path),
     },
     callback = function(args)
-      require("lreload.command").refresh(name, args)
+      M.refresh(name, args)
     end,
   })
   _post_hooks[name] = opts.post_hook
 end
 
-function ShowError.disable(name)
+function M.disable(name)
   vim.validate({ name = { name, "string" } })
   vim.api.nvim_clear_autocmds({ group = to_group_name(name) })
   _post_hooks[name] = nil
 end
 
-return ShowError:methods()
+return M
