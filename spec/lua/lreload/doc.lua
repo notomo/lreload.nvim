@@ -12,32 +12,19 @@ require("genvdoc").generate(full_plugin_name, {
         return "Lua module: " .. group
       end,
       group = function(node)
-        if node.declaration == nil then
+        if node.declaration == nil or node.declaration.type ~= "function" then
           return nil
         end
         return node.declaration.module
       end,
     },
     {
-      name = "TYPES",
-      body = function(ctx)
-        local opts_text
-        do
-          local descriptions = {
-            events = [[(table): autocmd events. default: %s]],
-            post_hook = [[(function): called after refreshed.
-  The function arugment is the same with autocmd api callback.
-  default: function(args) end]],
-          }
-          local default = require("lreload.option").default
-          local keys = vim.tbl_keys(default)
-          local lines = util.each_keys_description(keys, descriptions, default)
-          opts_text = table.concat(lines, "\n")
+      name = "STRUCTURE",
+      group = function(node)
+        if node.declaration == nil or node.declaration.type ~= "class" then
+          return nil
         end
-
-        return util.sections(ctx, {
-          { name = "options", tag_name = "opts", text = opts_text },
-        })
+        return "STRUCTURE"
       end,
     },
     {

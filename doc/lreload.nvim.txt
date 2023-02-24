@@ -14,7 +14,7 @@ enable({name}, {opts})                                      *lreload.enable()*
 
   Parameters: ~
     {name} (string) name prefix
-    {opts} (table|nil) |lreload.nvim-opts|
+    {opts} (LreloadOption?) |LreloadOption|
 
 disable({name})                                            *lreload.disable()*
   Disable hot-reloading for the lua module.
@@ -23,14 +23,14 @@ disable({name})                                            *lreload.disable()*
     {name} (string) module name prefix
 
 ==============================================================================
-TYPES                                                     *lreload.nvim-TYPES*
+STRUCTURE                                             *lreload.nvim-STRUCTURE*
 
-options                                                    *lreload.nvim-opts*
+LreloadOption                                                  *LreloadOption*
 
-- {events} (table): autocmd events. default: { "BufWritePost" }
-- {post_hook} (function): called after refreshed.
-  The function arugment is the same with autocmd api callback.
-  default: function(args) end
+- {events} (string[]?) autocmd events. default: { "BufWritePost" }
+- {post_hook} (fun(args:table?)?) called after refreshed.
+   The function arugment is |nvim_create_autocmd()| callback argument.
+   default: function(_) end
 
 ==============================================================================
 EXAMPLES                                               *lreload.nvim-EXAMPLES*
