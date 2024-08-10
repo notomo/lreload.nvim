@@ -1,5 +1,6 @@
 local M = {}
 
+local _pre_hooks = {}
 local _post_hooks = {}
 
 function M.refresh(name, autocmd_callback_args)
@@ -7,6 +8,12 @@ function M.refresh(name, autocmd_callback_args)
     name = { name, "string" },
     autocmd_callback_args = { autocmd_callback_args, "table", true },
   })
+
+  local pre_hook = _pre_hooks[name]
+  if pre_hook then
+    pre_hook(autocmd_callback_args)
+  end
+
   local dir = name:gsub("/", ".") .. "."
   for key in pairs(package.loaded) do
     if vim.startswith(key:gsub("/", "."), dir) or key == name then
@@ -38,12 +45,14 @@ function M.enable(name, raw_opts)
       M.refresh(name, args)
     end,
   })
+  _pre_hooks[name] = opts.pre_hook
   _post_hooks[name] = opts.post_hook
 end
 
 function M.disable(name)
   vim.validate({ name = { name, "string" } })
   vim.api.nvim_clear_autocmds({ group = to_group_name(name) })
+  _pre_hooks[name] = nil
   _post_hooks[name] = nil
 end
 

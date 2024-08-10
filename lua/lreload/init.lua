@@ -11,6 +11,9 @@ end
 --- @field post_hook fun(args:table?)? called after refreshed.
 ---  The function arugment is |nvim_create_autocmd()| callback argument.
 ---  default: function(_) end
+--- @field pre_hook fun(args:table?)? called before refreshed.
+---  The function arugment is |nvim_create_autocmd()| callback argument.
+---  default: function(_) end
 
 --- Enable hot-reloading for the lua module.
 --- @param name string: name prefix

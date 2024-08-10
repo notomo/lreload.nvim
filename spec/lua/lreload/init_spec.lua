@@ -74,11 +74,28 @@ describe("lreload.nvim", function()
   end)
 
   it("can custom post reload hook", function()
+    local pre_hooked = false
+    require("lreload.test.data").loaded = true
+
+    lreload.enable("lreload.test.data", {
+      pre_hook = function()
+        assert.is_true(require("lreload.test.data").loaded)
+        pre_hooked = true
+      end,
+    })
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
+
+    assert.is_true(pre_hooked)
+  end)
+
+  it("can custom post reload hook", function()
     local post_hooked = false
     require("lreload.test.data").loaded = true
 
     lreload.enable("lreload.test.data", {
       post_hook = function()
+        assert.is_nil(require("lreload.test.data").loaded)
         post_hooked = true
       end,
     })
@@ -86,6 +103,21 @@ describe("lreload.nvim", function()
     vim.cmd.write({ mods = { silent = true } })
 
     assert.is_true(post_hooked)
+  end)
+
+  it("can receive autocmd callback arguments by pre reload hook", function()
+    require("lreload.test.data").loaded = true
+
+    local received
+    lreload.enable("lreload.test.data", {
+      pre_hook = function(args)
+        received = args
+      end,
+    })
+    vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
+    vim.cmd.write({ mods = { silent = true } })
+
+    assert.equal("BufWritePost", received.event)
   end)
 
   it("can receive autocmd callback arguments by post reload hook", function()
