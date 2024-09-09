@@ -10,4 +10,7 @@ function helper.after_each()
   helper.cleanup_loaded_modules(plugin_name)
 end
 
+vim.opt.packpath:prepend(vim.fs.joinpath(helper.root, "spec/.shared/packages"))
+require("assertlib").register(require("vusted.assert").register)
+
 return helper

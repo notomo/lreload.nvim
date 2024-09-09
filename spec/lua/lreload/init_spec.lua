@@ -1,5 +1,6 @@
 local helper = require("lreload.test.helper")
 local lreload = helper.require("lreload")
+local assert = require("assertlib").typed(assert)
 
 describe("lreload.nvim", function()
   before_each(helper.before_each)
@@ -151,6 +152,6 @@ describe("lreload.nvim", function()
     vim.cmd.edit(helper.root .. "/lua/lreload/test/data/init.lua")
     vim.cmd.write({ mods = { silent = true } })
 
-    assert.is_same(1, called_count)
+    assert.same(1, called_count)
   end)
 end)
