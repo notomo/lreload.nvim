@@ -4,11 +4,6 @@ local _pre_hooks = {}
 local _post_hooks = {}
 
 function M.refresh(name, autocmd_callback_args)
-  vim.validate({
-    name = { name, "string" },
-    autocmd_callback_args = { autocmd_callback_args, "table", true },
-  })
-
   local pre_hook = _pre_hooks[name]
   if pre_hook then
     pre_hook(autocmd_callback_args)
@@ -50,7 +45,6 @@ function M.enable(name, raw_opts)
 end
 
 function M.disable(name)
-  vim.validate({ name = { name, "string" } })
   vim.api.nvim_clear_autocmds({ group = to_group_name(name) })
   _pre_hooks[name] = nil
   _post_hooks[name] = nil
