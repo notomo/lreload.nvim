@@ -23,7 +23,7 @@ function M.refresh(name, autocmd_callback_args)
 end
 
 local to_group_name = function(name)
-  return "lreload_" .. name
+  return "lreload.enabled." .. name
 end
 
 function M.enable(name, raw_opts)
