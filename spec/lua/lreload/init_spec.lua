@@ -1,6 +1,8 @@
+local ntf = require("ntf")
+local describe, it, before_each, after_each = ntf.describe, ntf.it, ntf.before_each, ntf.after_each
 local helper = require("lreload.test.helper")
-local lreload = helper.require("lreload")
-local assert = require("assertlib").typed(assert)
+local lreload = require("lreload")
+local assert = require("assertlib").typed(ntf.assert)
 
 describe("lreload.nvim", function()
   before_each(helper.before_each)
