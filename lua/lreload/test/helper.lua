@@ -8,14 +8,14 @@ require("assertlib").register(require("ntf.assert").register)
 
 helper.runtimepath = vim.o.runtimepath
 
-local data_dir = require("ntf.vendor.misclib.test.data_dir")
+local data_dir = require("lreload.vendor.misclib.test.data_dir")
 local data_root = vim.fs.joinpath(helper.root, "spec")
 
 local counter = 0
 
 function helper.before_each()
   vim.o.runtimepath = helper.runtimepath
-  helper.test_data = data_dir.setup(data_root, { base_dir = ("test_data_%d/"):format(vim.fn.getpid()) })
+  helper.test_data = data_dir.setup(data_root)
   vim.opt.runtimepath:append(helper.test_data:path(""))
 
   counter = counter + 1
