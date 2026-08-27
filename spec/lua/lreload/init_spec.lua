@@ -76,7 +76,7 @@ describe("lreload.nvim", function()
     assert.is_nil(require(helper.module).loaded)
   end)
 
-  it("can custom post reload hook", function()
+  it("can custom pre reload hook", function()
     local pre_hooked = false
     require(helper.module).loaded = true
 
